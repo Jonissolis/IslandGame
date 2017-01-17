@@ -2,12 +2,15 @@ package gameModel;
 
 
 public class IslandGrid {
-	private final int width = Constants.width;
-	private final int height = Constants.height;
-	private Tile[][] grid = new Tile[width][height];
+	private final int width;
+	private final int height;
+	private Tile[][] grid;
 	
 	
-	public IslandGrid() {
+	public IslandGrid(int width, int height) {
+		grid = new Tile[width][height];
+		this.width = width;
+		this.height = height;
 		for(int i = 0; i < width; i++) {
 			for(int j = 0; j < width; j++) {
 				grid[i][j] = TileFactory.getTile(0.1, i, j);

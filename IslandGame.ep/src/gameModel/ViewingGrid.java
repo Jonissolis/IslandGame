@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 
 /**
+ * This class is used to display the grid. 
  * 
  * This class requires a lot of work. 
  *
@@ -17,10 +18,12 @@ public class ViewingGrid extends JPanel implements Observer {
 	private static final long serialVersionUID = 7830774810728311332L; // Eclipse varnade mig innan jag lagt till detta. 
 	
 	
-	private JFrame frame = new JFrame();
+	private JFrame frame = new JFrame("Green, blue and red dots");
 	private IslandGrid islandGrid;
-	private int gridWidth;
-	private int gridHeight;
+	private final int gridWidth; // The width of the grid, defined in the constructor. 
+	private final int gridHeight; // The height of the grid, defined in the constructor. 
+	
+	
 	public ViewingGrid(IslandGrid islandGrid) {
 		this.islandGrid = islandGrid;
 		this.gridWidth = islandGrid.getWidth();
@@ -30,9 +33,11 @@ public class ViewingGrid extends JPanel implements Observer {
 				islandGrid.getTile(i, j).addObserver(this);
 			}
 		}
-		frame.add(this);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setContentPane(this);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
+		frame.setSize(900, 750);
+		frame.setLocation(500, 50);
 		frame.setVisible(true);
 		
 	}
@@ -43,30 +48,31 @@ public class ViewingGrid extends JPanel implements Observer {
 		for(int x = 0; x < gridWidth; x++) {
 			for(int y = 0; y < gridHeight; y++) {
 				if(islandGrid.getTile(x, y).isOccupied()) {
-					g.setColor(Color.BLUE);
-					g.fillRect(x*getWidth()/gridWidth, y*getHeight()/gridHeight, this.getWidth()/gridWidth, this.getHeight()/gridHeight);
+					drawRectangle(g, Color.BLUE, x, y);
 				}
 				else if(islandGrid.getTile(x, y).isBlocked()) {
-					g.setColor(Color.RED);
-					g.fillRect(x*getWidth()/gridWidth, y*getHeight()/gridHeight, this.getWidth()/gridWidth, this.getHeight()/gridHeight);
+					drawRectangle(g, Color.RED, x, y);
 				}
 				else {
-					g.setColor(Color.GREEN);
-					g.fillRect(x*getWidth()/gridWidth, y*getHeight()/gridHeight, this.getWidth()/gridWidth, this.getHeight()/gridHeight);
+					drawRectangle(g, Color.GREEN, x, y);
 				}
-				
 			}
 		}
 	}
 
-	public static void main(String[] args) {
-		IslandGrid islandGrid = new IslandGrid();
-		new Thread(new SimpleAI(new Client(islandGrid))).start();
-		new Thread(new SimpleAI(new Client(islandGrid))).start();
-		new Thread(new SimpleAI(new Client(islandGrid))).start();
-		new ViewingGrid(islandGrid);
-		
+	/**
+	 * This method draws a filled rectangle in the grid. 
+	 * @param g The graphics from paintComponent
+	 * @param c The color of the rectangle
+	 * @param x The x coordinate of the rectangle
+	 * @param y The y coordinate of the rectangle
+	 */
+	private void drawRectangle(Graphics g, Color c, int x, int y) {
+		g.setColor(c);
+		int adjustedY = gridWidth-y-1; // This adjusts the y coordinate to make (0,0) be the lower left corner instead of the upper left. 
+		g.fillRect(x*getWidth()/gridWidth, adjustedY*getHeight()/gridHeight, this.getWidth()/gridWidth, this.getHeight()/gridHeight);
 	}
+	
 
 	@Override
 	public void update(Observable o, Object arg) {

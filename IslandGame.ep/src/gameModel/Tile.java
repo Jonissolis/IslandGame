@@ -5,15 +5,26 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 
-
+/**
+ * 
+ * Class for the tiles on the play grid. 
+ * 
+ * Currently, each tile can either be empty, blocked or occupied. 
+ *
+ */
 public class Tile extends Observable {
 	private Lock lock = new ReentrantLock();
-	
 	private int xCoord;
 	private int yCoord;
 	private boolean blocked;
 	private Character occupier = null;
 	
+	/**
+	 * Constructor
+	 * @param blocked Tells whether characters can move onto this tile or not. 
+	 * @param xCoord The x coordinate of this tile. 
+	 * @param yCoord The y coordinate of this tile. 
+	 */
 	public Tile(boolean blocked, int xCoord, int yCoord) {
 		this.blocked = blocked;
 		this.xCoord = xCoord;
@@ -21,11 +32,15 @@ public class Tile extends Observable {
 	}
 	
 	
-	
+	/**
+	 * Tries to have a character occupy this tile. 
+	 * 
+	 * @param character The character that tries to occupy this tile. 
+	 * @return True if the character succeeded with moving to this tile. False if it was unable to.
+	 */
 	public boolean newOccupier(Character character) {
 		if(lock.tryLock()) {
-			if(!blocked) {
-				blocked = true;
+			if(!blocked && !isOccupied()) {
 				occupier = character;
 				setChanged();
 				notifyObservers();
@@ -37,9 +52,11 @@ public class Tile extends Observable {
 		return false;
 	}
 	
+	/**
+	 * Sets the current occupier to null. 
+	 */
 	public void leaveTile() {
 		occupier = null;
-		blocked = false;
 	}
 	
 	/**
@@ -73,37 +90,6 @@ public class Tile extends Observable {
 	public boolean isOccupied() {
 		return occupier!=null;
 	}
-	
-	
-	/**
-	 * This can be used to check for errors. Should only return false if there are errors.
-	 *  
-	 * @return False if errors were encountered. 
-	 */
-	private boolean blockedAssertion() {
-		if(lock.tryLock()) {
-			if(occupier != null && !blocked) {
-				return false;
-			}
-			return true;
-		} else {
-			return true; //
-		}
-	}
-
-
-
-
-
-
-	
-
-
-
-	
-
-
-
 
 	
 	
