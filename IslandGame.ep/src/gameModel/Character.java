@@ -22,49 +22,58 @@ public class Character {
 		}
 	}
 	
+
 	/**
-	 * Tries to move left. 
-	 * Does nothing if unable. 
+	 * 
+	 * Tries to move west. 
+	 * Does nothing if unable.
+	 * @return True if the move was successful, otherwise false. 
 	 */
-	public void moveWest() {
+	public boolean moveWest() {
 		Tile newTile = islandGrid.getTile(getXCoord() - 1, getYCoord());
-		moveTo(newTile);
+		return moveTo(newTile);
 	}
 	/**
-	 * Tries to move left. 
-	 * Does nothing if unable. 
+	 * 
+	 * Tries to move east. 
+	 * Does nothing if unable.
+	 * @return True if the move was successful, otherwise false. 
 	 */
-	public void moveEast() {
+	public boolean moveEast() {
 		Tile newTile = islandGrid.getTile(getXCoord() + 1, getYCoord());
-		moveTo(newTile);
+		return moveTo(newTile);
 	}
 	/**
-	 * Tries to move left. 
-	 * Does nothing if unable. 
-	 */
-	public void moveNorth() {
+	 * 
+	 * Tries to move north. 
+	 * Does nothing if unable.
+	 * @return True if the move was successful, otherwise false. 
+	 */	
+	public boolean moveNorth() {
 		Tile newTile = islandGrid.getTile(getXCoord(), getYCoord() + 1);
-		moveTo(newTile);
+		return moveTo(newTile);
 	}
 	/**
-	 * Tries to move left. 
+	 * Tries to move south. 
 	 * Does nothing if unable. 
 	 */
-	public void moveSouth() {
+	public boolean moveSouth() {
 		Tile newTile = islandGrid.getTile(getXCoord(), getYCoord() - 1);
-		moveTo(newTile);
+		return moveTo(newTile);
 	}
 	
 	/**
 	 * Tries to move to a tile. Does nothing if unable. 
 	 * @param newTile
 	 */
-	private void moveTo(Tile newTile) {
+	private boolean moveTo(Tile newTile) {
 		if(newTile!=null && newTile.newOccupier(this)) {
 			getTile().leaveTile();
 			xCoord = newTile.getXCoord();
 			yCoord = newTile.getYCoord();
+			return true;
 		}
+		return false;
 	}
 
 	public Tile getTile() {

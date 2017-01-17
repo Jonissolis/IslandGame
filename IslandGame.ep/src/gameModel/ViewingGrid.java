@@ -14,7 +14,9 @@ import javax.swing.JPanel;
  *
  */
 public class ViewingGrid extends JPanel implements Observer {
-
+	private static final long serialVersionUID = 7830774810728311332L; // Eclipse varnade mig innan jag lagt till detta. 
+	
+	
 	private JFrame frame = new JFrame();
 	private IslandGrid islandGrid;
 	private int gridWidth;
@@ -59,10 +61,9 @@ public class ViewingGrid extends JPanel implements Observer {
 
 	public static void main(String[] args) {
 		IslandGrid islandGrid = new IslandGrid();
-		new Thread(new SimpleAI(islandGrid)).start();
-		new Thread(new SimpleAI(islandGrid)).start();
-		new Thread(new SimpleAI(islandGrid)).start();
-//		new Thread(new SimpleAI(islandGrid)).start();
+		new Thread(new SimpleAI(new Client(islandGrid))).start();
+		new Thread(new SimpleAI(new Client(islandGrid))).start();
+		new Thread(new SimpleAI(new Client(islandGrid))).start();
 		new ViewingGrid(islandGrid);
 		
 	}
@@ -70,6 +71,5 @@ public class ViewingGrid extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		repaint();
-		
 	}
 }

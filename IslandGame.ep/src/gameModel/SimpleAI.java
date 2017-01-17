@@ -2,10 +2,10 @@ package gameModel;
 
 import java.util.Random;
 
-public class SimpleAI extends Character implements Runnable {
+public class SimpleAI extends BaseAI implements Runnable {
 
-	public SimpleAI(IslandGrid islandGrid) {
-		super(islandGrid);
+	public SimpleAI(Client client) {
+		super(client);
 	}
 
 	@Override

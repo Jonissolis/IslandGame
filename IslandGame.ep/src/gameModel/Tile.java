@@ -12,7 +12,6 @@ public class Tile extends Observable {
 	private int xCoord;
 	private int yCoord;
 	private boolean blocked;
-	
 	private Character occupier = null;
 	
 	public Tile(boolean blocked, int xCoord, int yCoord) {
