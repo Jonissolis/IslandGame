@@ -1,3 +1,7 @@
+#===================================
+# Diskuterade funderingar:
+Allt är flyttat till rätt avsnitt :)
+
 #====================================
 # Odiskuterade funderingar:
 Vi vill antagligen ha flera olika typer av containers och inte bara backpacks. Hur ska detta programmeras?
@@ -13,8 +17,8 @@ Vill vi att (0, 0) ska vara längst upp till vänster (matriser) eller längst n
 Items - En abstrakt klass "Item". Den bör till en början ha metoder som getId(), getMaxStackSize(). 
 Det är nog lämpligt att varje stack bara är en instans av klassen. I så fall är även en getCurrentStackSize() lämplig. 
 
-Backpack - Vi pratade om backpack. Efter att ha tänkt lite tror jag att det är lämpligare att kalla klassen container. Den kan ha
-de egenskaper vi bestämde att backpack skulle ha när vi diskuterade. 
+Backpack - Vi pratade om backpack. Efter att ha tänkt lite tror jag att det är lämpligare att kalla klassen container. 
+Den kan ha de egenskaper vi bestämde att backpack skulle ha när vi diskuterade. 
 
 #====================================
 # Aktuella ideér:
