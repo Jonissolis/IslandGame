@@ -1,22 +1,13 @@
 package serverSide;
 
 public class Item {
-	private int id;
+	private final int id;
 	private int currentStackSize;
 	private final int maxStackSize;
-	public Item(int id, int amount) {
+	public Item(int id, int amount, int maxAmount) {
 		this.id = id;
-		/*
-		* need method for max stackAmount.
-		* probably just a search for it depending on id
-		*/
-		this.maxStackSize = 1;
-		if(this.maxStackSize > amount) {
-			this.currentStackSize = amount;
-		}
-		else {
-			this.currentStackSize = maxStackSize;
-		}
+		this.currentStackSize = amount;
+		this.maxStackSize = maxAmount;
 	}
 	public int getID() {
 		return id;
