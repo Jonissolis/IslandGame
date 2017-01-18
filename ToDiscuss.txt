@@ -1,3 +1,0 @@
-Jag vill att vi ska vara konsekventa med koordinater.
-
-Vill vi att (0, 0) ska vara längst upp till vänster eller längst ner till vänster?
