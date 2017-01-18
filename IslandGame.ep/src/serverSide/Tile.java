@@ -1,4 +1,4 @@
-package gameModel;
+package serverSide;
 
 import java.util.Observable;
 import java.util.concurrent.locks.Lock;

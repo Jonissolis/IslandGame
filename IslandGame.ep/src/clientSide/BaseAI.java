@@ -1,4 +1,6 @@
-package gameModel;
+package clientSide;
+
+import serverSide.Client;
 
 public abstract class BaseAI {
 	private Client client;
@@ -17,6 +19,12 @@ public abstract class BaseAI {
 	}
 	public boolean moveSouth() {
 		return client.moveSouth();
+	}
+	public int getXCoord() {
+		return client.getXCoord();
+	}
+	public int getYCoord() {
+		return client.getYCoord();
 	}
 	public boolean isTileOccupied(int x, int y) {
 		return client.isTileOccupied(x, y);

@@ -1,6 +1,8 @@
-package gameModel;
+package clientSide;
 
 import java.util.Random;
+
+import serverSide.Client;
 
 public class SimpleAI extends BaseAI implements Runnable {
 

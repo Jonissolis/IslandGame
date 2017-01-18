@@ -1,4 +1,4 @@
-package gameModel;
+package serverSide;
 
 public class Client {
 	private Character character;
@@ -21,10 +21,17 @@ public class Client {
 	public boolean moveSouth() {
 		return character.moveSouth();
 	}
+	public int getXCoord() {
+		return character.getXCoord();
+	}
+	public int getYCoord() {
+		return character.getYCoord();
+	}
 	public boolean isTileOccupied(int x, int y) {
 		return islandGrid.getTile(x, y).isOccupied();
 	}
 	public boolean isTileBlocked(int x, int y) {
 		return islandGrid.getTile(x, y).isBlocked();
 	}
+	
 }

@@ -1,4 +1,4 @@
-package gameModel;
+package serverSide;
 
 public class Character {
 	private IslandGrid islandGrid;

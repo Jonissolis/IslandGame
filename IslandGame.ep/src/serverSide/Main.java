@@ -1,4 +1,6 @@
-package gameModel;
+package serverSide;
+
+import clientSide.SimpleAI;
 
 public class Main {
 

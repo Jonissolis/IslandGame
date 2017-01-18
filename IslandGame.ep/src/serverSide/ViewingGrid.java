@@ -1,4 +1,4 @@
-package gameModel;
+package serverSide;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Observable;
