@@ -4,7 +4,7 @@ public class Character {
 	private IslandGrid islandGrid;
 	private int xCoord;
 	private int yCoord;
-	
+	private Container backpack;
 	
 	
 	/**
@@ -19,6 +19,8 @@ public class Character {
 		} else {
 			xCoord = occupiedTile.getXCoord();
 			yCoord = occupiedTile.getYCoord();
+			backpack = new Container(20);				// This is for testing purpose. Remove later on!
+			backpack.addItem(ItemFactory.getHatchet()); // This is for testing purpose. Remove later on!
 		}
 	}
 	
@@ -94,5 +96,8 @@ public class Character {
 		return yCoord;
 	}
 	
+	public Container getContainer() {
+		return backpack;
+	}
 	
 }

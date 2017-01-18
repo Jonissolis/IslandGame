@@ -1,5 +1,7 @@
 package clientSide;
 
+import java.util.List;
+
 import serverSide.Client;
 
 public abstract class BaseAI {
@@ -32,5 +34,10 @@ public abstract class BaseAI {
 	public boolean isTileBlocked(int x, int y) {
 		return client.isTileBlocked(x, y);
 	}
-	
+	public List<Integer> getInteractions(int x, int y) {
+		return client.getInteractions(x, y);
+	}
+	public boolean performInteraction(int interaction, int x, int y) {
+		return client.performInteraction(interaction, x, y);
+	}
 }

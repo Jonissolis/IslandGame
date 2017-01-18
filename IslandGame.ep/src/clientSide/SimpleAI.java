@@ -18,16 +18,16 @@ public class SimpleAI extends BaseAI implements Runnable {
 		while(x < 1000) {
 			randomDouble = random.nextDouble();
 			if(randomDouble <= 0.25) {
-				moveWest();
+				if(moveWest()) { }
 			} else if(randomDouble <= 0.5) {
-				moveEast();
+				if(moveEast()) { }
 			} else if(randomDouble <= 0.75) {
-				moveNorth();
+				if(moveNorth()) { }
 			} else {
-				moveSouth();
+				if(moveSouth()) { }
 			} 
 			try {
-				Thread.sleep(100);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -1,5 +1,7 @@
 package serverSide;
 
+import java.util.List;
+
 public class Client {
 	private Character character;
 	private IslandGrid islandGrid;
@@ -34,4 +36,24 @@ public class Client {
 		return islandGrid.getTile(x, y).isBlocked();
 	}
 	
+	/**
+	 * Checks which interactions that are available from a tile. 
+	 * @param x The x coordinate of the tile. 
+	 * @param y The y coordinate of the tile. 
+	 * @return A list of interactions. 
+	 */
+	public List<Integer> getInteractions(int x, int y) {
+		Tile tile = islandGrid.getTile(x, y);
+		if(tile != null) {
+			return Interaction.getInteractions(tile);
+		}
+		return null;
+	}
+	public boolean performInteraction(int interaction, int x, int y) {
+		Tile tile = islandGrid.getTile(x, y);
+		if(tile != null) {
+			return Interaction.interact(interaction, character, tile);
+		}
+		return false;
+	}
 }

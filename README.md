@@ -1,3 +1,10 @@
+=====================================
+# Anteckningar
+Alla items har en array där varje index i arrayn beskriver en egenskap. 
+T.ex. så skulle index 7 i den här arrayen kunna beskriva föremålets woodcutting power. 
+
+
+
 #====================================
 # Odiskuterade funderingar:
 Vi vill antagligen ha flera olika typer av containers och inte bara backpacks. Hur ska detta programmeras?

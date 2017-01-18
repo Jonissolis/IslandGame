@@ -13,7 +13,7 @@ public class IslandGrid {
 		this.height = height;
 		for(int i = 0; i < width; i++) {
 			for(int j = 0; j < width; j++) {
-				grid[i][j] = TileFactory.getTile(0.1, i, j);
+				grid[i][j] = TileFactory.getTile(0.1, 0.5, i, j);
 			}
 		}
 	}
