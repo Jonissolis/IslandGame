@@ -1,7 +1,3 @@
-#===================================
-# Diskuterade funderingar:
-Allt är flyttat till rätt avsnitt :)
-
 #====================================
 # Odiskuterade funderingar:
 Vi vill antagligen ha flera olika typer av containers och inte bara backpacks. Hur ska detta programmeras?
