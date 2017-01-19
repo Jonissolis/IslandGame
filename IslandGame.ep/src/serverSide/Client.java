@@ -1,6 +1,10 @@
 package serverSide;
 
 import java.util.List;
+import java.util.Set;
+
+import interactions.Interaction;
+import interactions.Woodcutting;
 
 public class Client {
 	private Character character;
@@ -42,17 +46,26 @@ public class Client {
 	 * @param y The y coordinate of the tile. 
 	 * @return A list of interactions. 
 	 */
-	public List<Integer> getInteractions(int x, int y) {
+	public Set<Integer> getInteractions(int x, int y) {
 		Tile tile = islandGrid.getTile(x, y);
 		if(tile != null) {
-			return Interaction.getInteractions(tile);
+			return tile.getInteractions();
 		}
 		return null;
 	}
-	public boolean performInteraction(int interaction, int x, int y) {
+	
+	/**
+	 * Attempts to perform an interaction. Does nothing if unable. 
+	 * 
+	 * @param interactionID The ID of the interaction. 
+	 * @param x The x coordinate of the tile where the interaction is to be performed. 
+	 * @param y The y coordinate of the tile where the interaction is to be performed. 
+	 * @return True if the interaction was performed. Otherwise false. 
+	 */
+	public boolean performInteraction(int interactionID, int x, int y) {
 		Tile tile = islandGrid.getTile(x, y);
 		if(tile != null) {
-			return Interaction.interact(interaction, character, tile);
+			return tile.interact(interactionID, character);
 		}
 		return false;
 	}

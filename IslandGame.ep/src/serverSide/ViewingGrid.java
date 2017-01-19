@@ -7,6 +7,8 @@ import java.util.Observer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import interactions.Woodcutting;
+
 
 /**
  * This class is used to display the grid. 
@@ -53,7 +55,7 @@ public class ViewingGrid extends JPanel implements Observer {
 				else if(islandGrid.getTile(x, y).isBlocked()) {
 					drawRectangle(g, Color.RED, x, y);
 				}
-				else if(islandGrid.getTile(x, y).getProperty(Tile.WOODCUTTABLE_INDEX) > 0) {
+				else if(islandGrid.getTile(x, y).hasInteraction(Woodcutting.INTERACTION_ID)) {
 					drawRectangle(g, Color.YELLOW, x, y);
 				}
 				else {

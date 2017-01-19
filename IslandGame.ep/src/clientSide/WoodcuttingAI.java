@@ -1,10 +1,10 @@
 package clientSide;
 
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
+import interactions.Woodcutting;
 import serverSide.Client;
-import serverSide.Interaction;
 
 public class WoodcuttingAI extends BaseAI implements Runnable{
 
@@ -15,43 +15,38 @@ public class WoodcuttingAI extends BaseAI implements Runnable{
 		super(client);
 	}
 
+	
+	private boolean woodcutIfAble(int x, int y) {
+		Set<Integer> interactions = getInteractions(x, y);
+		if(interactions != null && interactions.contains(Woodcutting.INTERACTION_ID)) {
+			return performInteraction(Woodcutting.INTERACTION_ID, x, y);
+		}
+		return false;
+	}
+	
 	@Override
 	public void run() {
-		xCoord = getXCoord();
-		yCoord = getYCoord();
-		
 		Random random = new Random();
 		double randomDouble;
 		int x = 0;
-		List<Integer> interactions;
+		
 		while(x < 1000) {
-			if((interactions = getInteractions(xCoord + 1, yCoord)) != null && interactions.contains(Interaction.WOODCUTTING)) {
-				performInteraction(Interaction.WOODCUTTING, xCoord + 1, yCoord);
-			} else if((interactions = getInteractions(xCoord - 1, yCoord)) != null && interactions.contains(Interaction.WOODCUTTING)) {
-				performInteraction(Interaction.WOODCUTTING, xCoord - 1, yCoord);
-			} else if((interactions = getInteractions(xCoord, yCoord + 1)) != null && interactions.contains(Interaction.WOODCUTTING)) {
-				performInteraction(Interaction.WOODCUTTING, xCoord, yCoord + 1);
-			} else if((interactions = getInteractions(xCoord, yCoord - 1)) != null && interactions.contains(Interaction.WOODCUTTING)) {
-				performInteraction(Interaction.WOODCUTTING, xCoord, yCoord - 1);
-			}
+			xCoord = getXCoord();
+			yCoord = getYCoord();
+			if(woodcutIfAble(xCoord + 1, yCoord)) {} 
+			else if(woodcutIfAble(xCoord - 1, yCoord)) {} 
+			else if(woodcutIfAble(xCoord, yCoord + 1)) {}
+			else if(woodcutIfAble(xCoord, yCoord - 1)) {} 
 			
 			randomDouble = random.nextDouble();
 			if(randomDouble <= 0.25) {
-				if(moveWest()) {
-					xCoord -= 1;
-				}
+				moveWest();
 			} else if(randomDouble <= 0.5) {
-				if(moveEast()) {
-					xCoord += 1;
-				}
+				moveEast();
 			} else if(randomDouble <= 0.75) {
-				if(moveNorth()) {
-					yCoord += 1;
-				}
+				moveNorth();
 			} else {
-				if(moveSouth()) {
-					yCoord -= 1;
-				}
+				moveSouth();
 			} 
 			try {
 				Thread.sleep(100);

@@ -1,8 +1,13 @@
 package serverSide;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import interactions.Interaction;
 
 
 /**
@@ -15,13 +20,14 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Tile extends Observable {
 	public static final int IS_BLOCKED_INDEX = 0;
 	public static final int IS_OCCUPIED_INDEX = 1;
-	public static final int WOODCUTTABLE_INDEX = 2;
-	public static final int NUMBER_OF_PROPERTIES = 3;
+	public static final int NUMBER_OF_PROPERTIES = 2;
 	
 	private Lock lock = new ReentrantLock();
 	private int xCoord;
 	private int yCoord;
 	private final int[] properties;
+	private Map<Integer, Interaction> interactions = new HashMap<Integer, Interaction>();
+	
 	private Character occupier = null;
 	
 	/**
@@ -133,5 +139,32 @@ public class Tile extends Observable {
 		properties[propertyIndex] = newValue;
 		setChanged();
 		notifyObservers();
+	}
+	public Set<Integer> getInteractions() {
+		return interactions.keySet();
+	}
+	public boolean interact(int interactionID, Character performer) {
+		Interaction interaction = interactions.get(interactionID);
+		if(interaction != null) {
+			return interaction.interact(performer, this);
+		}
+		return false;
+	}
+	public void addInteraction(Interaction interaction) {
+		interactions.put(interaction.getInteractionID(), interaction);
+	}
+	
+	public boolean hasInteraction(int interactionID) {
+		return interactions.containsKey(interactionID);
+	}
+	public boolean hasInteraction(Interaction interaction) {
+		return interactions.containsValue(interaction);
+	}
+
+	public void removeInteraction(Interaction interaction) {
+		if(interactions.remove(interaction.getInteractionID()) != interaction) {
+			System.out.println("ERROR: Wrong interaction was removed from a tile. "); // Error message. Could be caused by two characters doing the same interaction. 
+		}
+		
 	}
 }

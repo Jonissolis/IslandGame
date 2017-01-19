@@ -1,5 +1,6 @@
 package serverSide;
 
+import interactions.Woodcutting;
 
 /**
  * 
@@ -17,10 +18,13 @@ public class TileFactory {
 	 * @return The tile generated. 
 	 */
 	public static Tile getTile(double blockedProb, double treeProb, int xCoord, int yCoord) {
-		int[] properties = new int[3];
+		int[] properties = new int[Tile.NUMBER_OF_PROPERTIES];
 		properties[Tile.IS_BLOCKED_INDEX] = Math.random() < blockedProb ? 1 : 0;
 		properties[Tile.IS_OCCUPIED_INDEX] = 0;
-		properties[Tile.WOODCUTTABLE_INDEX] = Math.random() < treeProb ? 1 : 0;
-		return new Tile(xCoord, yCoord, properties);
+		Tile tile = new Tile(xCoord, yCoord, properties);
+		if(Math.random() < treeProb) {
+			tile.addInteraction(new Woodcutting());
+		}
+		return tile;
 	}
 }
