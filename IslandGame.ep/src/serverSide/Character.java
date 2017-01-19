@@ -20,7 +20,7 @@ public class Character {
 			xCoord = occupiedTile.getXCoord();
 			yCoord = occupiedTile.getYCoord();
 			backpack = new Container(20);				// This is for testing purpose. Remove later on!
-			backpack.addItem(ItemFactory.getHatchet()); // This is for testing purpose. Remove later on!
+			backpack.addItem(ItemFactory.getItem(ItemFactory.HATCHET_ID)); // This is for testing purpose. Remove later on!
 		}
 	}
 	

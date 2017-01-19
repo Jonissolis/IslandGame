@@ -16,6 +16,7 @@ public class Tile extends Observable {
 	public static final int IS_BLOCKED_INDEX = 0;
 	public static final int IS_OCCUPIED_INDEX = 1;
 	public static final int WOODCUTTABLE_INDEX = 2;
+	public static final int NUMBER_OF_PROPERTIES = 3;
 	
 	private Lock lock = new ReentrantLock();
 	private int xCoord;
@@ -30,6 +31,7 @@ public class Tile extends Observable {
 	 * @param yCoord The y coordinate of this tile. 
 	 */
 	public Tile(int xCoord, int yCoord, int[] properties) {
+		assert properties.length == NUMBER_OF_PROPERTIES: "A tile was not given the correct amount of properties. ";
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
 		this.properties = properties.clone();

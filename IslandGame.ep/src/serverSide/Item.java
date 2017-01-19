@@ -11,7 +11,11 @@ public class Item {
 	private int currentStackSize;
 	private final int[] properties;
 	public static final int WOODCUTTING_POWER_INDEX = 0;
+	public static final int NUMBER_OF_PROPERTIES = 1;
+	
+	
 	public Item(int id, int amount, int maxAmount, int[] properties) {
+		assert properties.length == NUMBER_OF_PROPERTIES: "A tile was not given the correct amount of properties. ";
 		this.id = id;
 		this.currentStackSize = amount;
 		this.maxStackSize = maxAmount;

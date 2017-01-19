@@ -10,6 +10,8 @@ public class Main {
 		new ViewingGrid(islandGrid);
 		for(int i = 0; i < 1; i++) {
 			new Thread(new WoodcuttingAI(new Client(islandGrid))).start();
+			new Thread(new SimpleAI(new Client(islandGrid))).start();
+			
 		}
 	}
 
