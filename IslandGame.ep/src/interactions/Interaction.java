@@ -4,10 +4,7 @@ import serverSide.Character;
 import serverSide.Tile;
 
 
-/**
- * Class to handle interactions. Currently both has functionality to get all interactions available on a certain tile and functionality for performing interactions. 
- * I don't like this class. I will probably change it into an abstract class or interface and let each interaction have it's own class. 
- * 
+/** 
  *
  */
 public abstract class Interaction {
@@ -32,5 +29,14 @@ public abstract class Interaction {
 	 */
 	public static int getDistance(Character character, Tile tile) {
 		return Math.abs(character.getXCoord() - tile.getXCoord()) + Math.abs(character.getYCoord() - tile.getYCoord());
+	}
+	
+	/**
+	 * TODO Implement hashcode. 
+	 * Not sure how we want it implemented tho. 
+	 * Maybe just return interactionID. 
+	 */
+	public int hashCode() {
+		return super.hashCode();
 	}
 }

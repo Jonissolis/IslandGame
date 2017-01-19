@@ -18,14 +18,10 @@ import interactions.Interaction;
  *
  */
 public class Tile extends Observable {
-	public static final int IS_BLOCKED_INDEX = 0;
-	public static final int IS_OCCUPIED_INDEX = 1;
-	public static final int NUMBER_OF_PROPERTIES = 2;
-	
+	private boolean blocked;
 	private Lock lock = new ReentrantLock();
 	private int xCoord;
 	private int yCoord;
-	private final int[] properties;
 	private Map<Integer, Interaction> interactions = new HashMap<Integer, Interaction>();
 	
 	private Character occupier = null;
@@ -36,11 +32,10 @@ public class Tile extends Observable {
 	 * @param xCoord The x coordinate of this tile. 
 	 * @param yCoord The y coordinate of this tile. 
 	 */
-	public Tile(int xCoord, int yCoord, int[] properties) {
-		assert properties.length == NUMBER_OF_PROPERTIES: "A tile was not given the correct amount of properties. ";
+	public Tile(int xCoord, int yCoord, boolean blocked) {
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
-		this.properties = properties.clone();
+		this.blocked = blocked;
 	}
 	
 	
@@ -71,24 +66,15 @@ public class Tile extends Observable {
 	private void Occupy(Character character) {
 		lock.lock();
 		occupier = character;
-		properties[IS_OCCUPIED_INDEX] = 1;
 		lock.unlock();
 	}
 	
 	/**
-	 * Sets the current occupier to null. 
+	 * Makes this tile unoccupied.  
 	 */
-	public void leaveTile() {
-		stopOccupying();
-	}
-	
-	/**
-	 * Sets current occupier to null and changes the occupied property to zero. 
-	 */
-	private void stopOccupying() {
+	public void stopOccupying() {
 		lock.lock();
 		occupier = null;
-		properties[IS_OCCUPIED_INDEX] = 0;
 		lock.unlock();
 	}
 	
@@ -110,10 +96,10 @@ public class Tile extends Observable {
 	
 	/**
 	 * 
-	 * @return True if blocked. False otherwise. This method will not take the tiles lock which means something else might occupy this tile before anything can be done with it. 
+	 * @return True if blocked. False otherwise. 
 	 */
 	public boolean isBlocked() {
-		return properties[0] == 1 ? true : false;
+		return blocked;
 	}
 	
 	/**
@@ -121,7 +107,7 @@ public class Tile extends Observable {
 	 * @return True if occupied. False otherwise.  
 	 */
 	public boolean isOccupied() {
-		return properties[1] == 1 ? true : false;
+		return occupier != null;
 	}
 
 	/**
@@ -132,17 +118,20 @@ public class Tile extends Observable {
 		return occupier;
 	}
 	
-	public int getProperty(int propertyIndex) {
-		return properties[propertyIndex];
-	}
-	public void changeProperty(int propertyIndex, int newValue) {
-		properties[propertyIndex] = newValue;
-		setChanged();
-		notifyObservers();
-	}
+	/**
+	 * Getter for a set of IDs corresponding to the IDs of the interactions available on this tile. 
+	 * @return A set of IDs. 
+	 */
 	public Set<Integer> getInteractions() {
 		return interactions.keySet();
 	}
+	
+	/**
+	 * Allows a character to perform an interaction on this tile. 
+	 * @param interactionID The ID of the interaction to be performed. 
+	 * @param performer The character who is going to perform the interaction. 
+	 * @return True if the interaction was successful, otherwise false. 
+	 */
 	public boolean interact(int interactionID, Character performer) {
 		Interaction interaction = interactions.get(interactionID);
 		if(interaction != null) {
@@ -150,17 +139,37 @@ public class Tile extends Observable {
 		}
 		return false;
 	}
+	
+	/**
+	 * Adds an interaction to this tile. 
+	 * @param interaction The interaction to be added. 
+	 */
 	public void addInteraction(Interaction interaction) {
 		interactions.put(interaction.getInteractionID(), interaction);
 	}
 	
+	/**
+	 * Checks whether this tile has an interaction with a certain ID or not. 
+	 * @param interactionID The ID of the interaction. 
+	 * @return True if it has the interaction, otherwise false. 
+	 */
 	public boolean hasInteraction(int interactionID) {
 		return interactions.containsKey(interactionID);
 	}
+	
+	/**
+	 * Checks whether this tile has an interaction or not. 
+	 * @param interaction The interaction. 
+	 * @return True if it has the interaction, otherwise false. 
+	 */
 	public boolean hasInteraction(Interaction interaction) {
 		return interactions.containsValue(interaction);
 	}
 
+	/**
+	 * Removes an interaction from this tile. 
+	 * @param interaction The interaction to be removed. 
+	 */
 	public void removeInteraction(Interaction interaction) {
 		if(interactions.remove(interaction.getInteractionID()) != interaction) {
 			System.out.println("ERROR: Wrong interaction was removed from a tile. "); // Error message. Could be caused by two characters doing the same interaction. 

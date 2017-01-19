@@ -1,10 +1,6 @@
 package serverSide;
 
-import java.util.List;
 import java.util.Set;
-
-import interactions.Interaction;
-import interactions.Woodcutting;
 
 public class Client {
 	private Character character;
@@ -44,7 +40,7 @@ public class Client {
 	 * Checks which interactions that are available from a tile. 
 	 * @param x The x coordinate of the tile. 
 	 * @param y The y coordinate of the tile. 
-	 * @return A list of interactions. 
+	 * @return A list of interaction IDs. 
 	 */
 	public Set<Integer> getInteractions(int x, int y) {
 		Tile tile = islandGrid.getTile(x, y);
