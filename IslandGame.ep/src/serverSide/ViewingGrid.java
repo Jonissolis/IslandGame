@@ -42,7 +42,7 @@ public class ViewingGrid extends JPanel implements Observer {
 		frame.setSize(900, 750);
 		frame.setLocation(500, 50);
 		frame.setVisible(true);
-		
+		setFocusable(true);
 	}
 
 	@Override

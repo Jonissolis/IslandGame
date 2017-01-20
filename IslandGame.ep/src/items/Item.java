@@ -11,12 +11,13 @@ public class Item {
 	private int currentStackSize;
 	private ToolComponent toolComponent;
 	private WeaponComponent weaponComponent;
+	private String name;
 	
-	
-	public Item(int id, int amount, int maxAmount) {
+	public Item(int id, int amount, int maxAmount, String name) {
 		this.id = id;
 		this.currentStackSize = amount;
 		this.maxStackSize = maxAmount;
+		this.name = name;
 	}
 	
 	/**
@@ -90,4 +91,11 @@ public class Item {
 			return false;
 		}
 	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

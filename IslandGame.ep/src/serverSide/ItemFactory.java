@@ -9,7 +9,7 @@ public class ItemFactory {
 	
 	public static Item getItem(int ID) {	// This is for testing purpose. Remove later on!
 		if(ID == HATCHET_ID) {
-			Item item = new Item(1, 1, 1);
+			Item item = new Item(1, 1, 1, "Hatchet");
 			ToolComponent toolComponent = new ToolComponent();
 			toolComponent.setIsWoodcuttingTool(true);
 			item.setToolComponent(toolComponent);
