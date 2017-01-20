@@ -1,39 +1,35 @@
 =====================================
 # Anteckningar
-Alla items har en array där varje index i arrayn beskriver en egenskap. 
-T.ex. så skulle index 7 i den här arrayen kunna beskriva föremålets woodcutting power. 
-
 
 
 #====================================
 # Odiskuterade funderingar:
-Vi vill antagligen ha flera olika typer av containers och inte bara backpacks. Hur ska detta programmeras?
-Jag tänker mig föremål som en minecraft kista. Av flera anledningar verkar det lämpligt att containers är items. 
-Ett vettigt sätt att göra det på är att ha en abstrakt klass container som ärver av items. 
-Backpack skulle sedan kunna ärva från container. 
-
-Jag vill att vi ska vara konsekventa med koordinater.
-Vill vi att (0, 0) ska vara längst upp till vänster (matriser) eller längst ner till vänster (koordinater)?
+Skriv här om ni tänker på något som vi borde ha med men som inte finns ännu. 
 
 #====================================
-# Att göra:
-Items - En abstrakt klass "Item". Den bör till en början ha metoder som getId(), getMaxStackSize(). 
-Det är nog lämpligt att varje stack bara är en instans av klassen. I så fall är även en getCurrentStackSize() lämplig. 
+# Vad gör vi just nu:
+Jonatan - Tänker på hur vi ska fortsätta. Jag skulle vilja hitta ett sätt att använda items på som jag är nöjd med men något
+sådant har inte dykt upp ännu. Jag lägger ganska mycket fokus på att städa koden och se till att den funkar bra för framtiden. 
 
-Backpack - Vi pratade om backpack. Efter att ha tänkt lite tror jag att det är lämpligare att kalla klassen container. 
-Den kan ha de egenskaper vi bestämde att backpack skulle ha när vi diskuterade. 
+Robin - Håller på att hitta på och koda en algoritm som ska beräkna en väg från en ruta till en annan som både är snabb är
+som hittar en relativt bra väg. 
+
+Elona - Håller på att skapa en view som ligger på klientdelen av vår struktur. För att kunna skapa denna view behöver en del
+hjälpklasser på klientsidan av projekt skapas, så som IslandGrid och Tile. 
 
 #====================================
 # Aktuella ideér:
-Items - Alla möjliga typer av items. Alla dessa bör ha ett unikt ID. I framtiden kan det finnas flera
-varianter av samma item med olika kvalité och durability.  
+Server-Klient - Vi skulle faktiskt kunna implementera en klass som gör det möjligt att spela med varandra över internet. Det
+skulle vara väldigt coolt om vi fick det att fungera. 
 
-Backpack - Man bör ha en backpack att lägga föremål i. Till en början så tar alla items
-lika mycket plats i backpacken och det finns inget viktsystem. En del föremål stackar,
-detta bör tänkas på vid implementering av backpack. Se även min kommentar under "Odiskuterade funderingar". 
+Mer vettig miljö - Just nu så bara slumpas miljön genom att varje tile har en viss sannolikhet att bli ett berg, en viss
+sannolikhet att ha ett träd osv. Det vore bra om vi kunde få en aning med struktur i miljön så att berg tycker om att
+hamna nära varandra och att träd tycker om att hamna nära varandra (tänk riktiga berg och skogar). En bra algoritm för
+detta skulle vara najs. 
 
-Interaktioner - Man kanske kan fråga en tile vad som går att göra på den. Sedan är det karaktären som försöker interrakta med den. 
-Kanske en klass för interaktions klass som håller koll på vad man kan göra på en viss tile. 
+Fler interaktioner och föremål - I nuläget är en yxa det enda föremålet som finns och de att hugga träd och äta kakor är de enda
+interaktioner som finns (och äta kaka är en funktion som främst finns för testing). Fler interaktioner behövs för att spelet ska
+vara intressant men då jag inte är helt säker på ifall jag är nöjd med hur items fungerar har jag väntat lite med att fortsätta på detta. 
 
 #====================================
 # Ideér till längre fram: 
@@ -43,3 +39,10 @@ Tools - Man behöver olika typer av tools för att göra olika saker, till exemp
 spade för att gräva, vapen-liknande för att slåss, osv. 
 
 Items - Kvalité och durability till items.
+
+Bättre GUI - När det finns en view på klientsidan så kan vi börja tänka på att lägga till fler funktioner till GUI:t. 
+
+Bättre grafik - Det vore väldigt coolt om vi kunde använda oss av olika sprites istället för rektanglar på viewen. 
+
+AIs med olika mål - När algoritmen för att hitta en bra väg till en viss ruta finns så kan vi börja titta på olika typer av AIs. 
+T.ex. så skulle vi kunna ha en AI som gör allt den kan för att hugga ner så många träd som möjligt, en som jagar kakan. 
