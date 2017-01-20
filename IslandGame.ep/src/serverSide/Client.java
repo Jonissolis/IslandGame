@@ -1,16 +1,23 @@
 package serverSide;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
-public class Client {
+import clientSide.BaseControls;
+
+public class Client implements Observer {
 	private Character character;
 	private IslandGrid islandGrid;
+	private BaseControls client;
 	
 	public Client(IslandGrid islandGrid) {
 		this.islandGrid = islandGrid;
 		character = new Character(islandGrid);
 	}
-	
+	public void setClient(BaseControls client) {
+		this.client = client;
+	}
 	public boolean moveWest() {
 		return character.moveWest();
 	}
@@ -64,5 +71,31 @@ public class Client {
 			return tile.interact(interactionID, character);
 		}
 		return false;
+	}
+
+	/**
+	 * Adds this client as observer on a tile causing it to call the clients updateTile() method. 
+	 * @param x The x coordinate of the tile to be observed. 
+	 * @param y The y coordinate of the tile to be observed.
+	 */
+	public void observeTile(int x, int y) {
+		islandGrid.getTile(x, y).addObserver(this);
+	}
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		if(o instanceof Tile) {
+			Tile tile = (Tile) o;
+			if(client != null) {
+				client.updateTile(tile.getXCoord(), tile.getYCoord());
+			}
+		}
+	}
+	
+	public int getGridWidth() {
+		return islandGrid.getWidth();
+	}
+	public int getGridHeight() {
+		return islandGrid.getHeight();
 	}
 }

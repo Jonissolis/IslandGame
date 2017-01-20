@@ -40,4 +40,9 @@ public abstract class BaseControls {
 	public boolean performInteraction(int interactionID, int x, int y) {
 		return client.performInteraction(interactionID, x, y);
 	}
+	public void observeTile(int x, int y) {
+		client.observeTile(x, y);
+	}
+	public void updateTile(int x, int y) {
+	}
 }
