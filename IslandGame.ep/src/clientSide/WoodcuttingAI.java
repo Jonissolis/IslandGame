@@ -1,6 +1,5 @@
 package clientSide;
 
-import java.util.Random;
 import java.util.Set;
 
 import interactions.Woodcutting;
@@ -26,28 +25,16 @@ public class WoodcuttingAI extends BaseAI implements Runnable{
 	
 	@Override
 	public void run() {
-		Random random = new Random();
-		double randomDouble;
 		int x = 0;
-		
-		while(x < 1000) {
+		while(x < 100000) {
 			xCoord = getXCoord();
 			yCoord = getYCoord();
-			if(woodcutIfAble(xCoord + 1, yCoord)) {} 
-			else if(woodcutIfAble(xCoord - 1, yCoord)) {} 
-			else if(woodcutIfAble(xCoord, yCoord + 1)) {}
-			else if(woodcutIfAble(xCoord, yCoord - 1)) {} 
+			woodcutIfAble(xCoord + 1, yCoord); 
+			woodcutIfAble(xCoord - 1, yCoord); 
+			woodcutIfAble(xCoord, yCoord + 1);
+			woodcutIfAble(xCoord, yCoord - 1); 
+			randomWalk(); 
 			
-			randomDouble = random.nextDouble();
-			if(randomDouble <= 0.25) {
-				moveWest();
-			} else if(randomDouble <= 0.5) {
-				moveEast();
-			} else if(randomDouble <= 0.75) {
-				moveNorth();
-			} else {
-				moveSouth();
-			} 
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {

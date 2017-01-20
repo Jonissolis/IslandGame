@@ -1,4 +1,4 @@
-package serverSide;
+package items;
 
 /**
  * 
@@ -9,17 +9,48 @@ public class Item {
 	private final int id;
 	private final int maxStackSize;
 	private int currentStackSize;
-	private final int[] properties;
-	public static final int WOODCUTTING_POWER_INDEX = 0;
-	public static final int NUMBER_OF_PROPERTIES = 1;
+	private ToolComponent toolComponent;
+	private WeaponComponent weaponComponent;
 	
 	
-	public Item(int id, int amount, int maxAmount, int[] properties) {
-		assert properties.length == NUMBER_OF_PROPERTIES: "A tile was not given the correct amount of properties. ";
+	public Item(int id, int amount, int maxAmount) {
 		this.id = id;
 		this.currentStackSize = amount;
 		this.maxStackSize = maxAmount;
-		this.properties = properties.clone();
+	}
+	
+	/**
+	 * Sets the tool component of the item. 
+	 * @param toolComponent The toolComponent to set this toolComponent equal to. 
+	 */
+	public void setToolComponent(ToolComponent toolComponent) {
+		this.toolComponent = toolComponent;
+	}
+	
+	/**
+	 * Sets the tool component of the item. 
+	 * @param toolComponent The toolComponent to set this toolComponent equal to. 
+	 */
+	public void setWeaponComponent(WeaponComponent weaponComponent) {
+		this.weaponComponent = weaponComponent;
+	}
+	
+	/**
+	 * 
+	 * @param toolComponent
+	 * @return
+	 */
+	public ToolComponent getToolComponent() {
+		return toolComponent;
+	}
+	
+	/**
+	 * 
+	 * @param toolComponent
+	 * @return
+	 */
+	public WeaponComponent getWeaponComponent() {
+		return weaponComponent;
 	}
 	
 	/**
@@ -58,13 +89,5 @@ public class Item {
 		} else {
 			return false;
 		}
-	}
-	
-	public int[] getProperties() {
-		return properties.clone();
-	}
-	
-	public int getProperty(int property) {
-		return properties[property];
 	}
 }

@@ -1,5 +1,8 @@
 package serverSide;
 
+import items.Item;
+import items.ToolComponent;
+
 public class Container {
 	private int size;
 	private Item[] items;
@@ -27,14 +30,18 @@ public class Container {
 		return false;
 	}
 
-	public int getProperty(int property) {
-		int highestValue = 0;
+	public boolean canWoodcut() {
+		Item item;
+		ToolComponent toolComponent;
 		for(int i = 0; i < size; i++) {
-			if(items[i] != null) {
-				highestValue = Math.max(highestValue, items[i].getProperty(property));
+			item = items[i];
+			if(item != null) {
+				toolComponent = item.getToolComponent();
+				if(toolComponent != null) {
+					return(toolComponent.canCutWood());
+				}
 			}
 		}
-		return highestValue;
+		return false;
 	}
-	
 }

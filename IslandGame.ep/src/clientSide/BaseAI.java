@@ -1,43 +1,29 @@
 package clientSide;
 
-import java.util.Set;
+import java.util.Random;
 
 import serverSide.Client;
 
-public abstract class BaseAI {
-	private Client client;
-	
+public abstract class BaseAI extends BaseControls {
+
 	public BaseAI(Client client) {
-		this.client = client;
+		super(client);
 	}
-	public boolean moveWest() {
-		return client.moveWest();
-	}
-	public boolean moveEast() {
-		return client.moveEast();
-	}
-	public boolean moveNorth() {
-		return client.moveNorth();
-	}
-	public boolean moveSouth() {
-		return client.moveSouth();
-	}
-	public int getXCoord() {
-		return client.getXCoord();
-	}
-	public int getYCoord() {
-		return client.getYCoord();
-	}
-	public boolean isTileOccupied(int x, int y) {
-		return client.isTileOccupied(x, y);
-	}
-	public boolean isTileBlocked(int x, int y) {
-		return client.isTileBlocked(x, y);
-	}
-	public Set<Integer> getInteractions(int x, int y) {
-		return client.getInteractions(x, y);
-	}
-	public boolean performInteraction(int interactionID, int x, int y) {
-		return client.performInteraction(interactionID, x, y);
+
+	public void randomWalk() {
+		switch(new Random().nextInt(4)){
+		case 0:
+			moveWest();
+			break;
+		case 1:
+			moveEast();
+			break;
+		case 2:
+			moveNorth();
+			break;
+		case 3:
+			moveSouth();
+			break;
+		}
 	}
 }
