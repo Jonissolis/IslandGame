@@ -8,17 +8,11 @@ import serverSide.Tile;
  *
  */
 public abstract class Interaction {
-	private final int interactionID;
 
 
 	public abstract boolean interact(Character performer, Tile tile);
 	
-	protected Interaction(int interactionID) {
-		this.interactionID = interactionID; 
-	}
-	public final int getInteractionID() {
-		return interactionID;
-	}
+	public abstract int getInteractionID();
 	
 	/**
 	 * This calculates the distance between a character and a tile. Will not follow diagonals.  

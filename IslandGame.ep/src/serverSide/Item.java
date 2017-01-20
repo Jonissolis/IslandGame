@@ -67,11 +67,4 @@ public class Item {
 	public int getProperty(int property) {
 		return properties[property];
 	}
-	
-	
-	
-	
-	
-	
-	
 }

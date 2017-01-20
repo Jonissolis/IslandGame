@@ -7,6 +7,7 @@ import java.util.Observer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import cookieGame.EatCookie;
 import interactions.Woodcutting;
 
 
@@ -47,10 +48,15 @@ public class ViewingGrid extends JPanel implements Observer {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		Tile tile;
 		for(int x = 0; x < gridWidth; x++) {
 			for(int y = 0; y < gridHeight; y++) {
-				if(islandGrid.getTile(x, y).isOccupied()) {
+				tile = islandGrid.getTile(x, y);
+				if(tile.isOccupied()) {
 					drawRectangle(g, Color.BLUE, x, y);
+				}
+				else if(tile.hasInteraction(EatCookie.INTERACTION_ID)) {
+					drawRectangle(g, Color.CYAN, x, y);
 				}
 				else if(islandGrid.getTile(x, y).isBlocked()) {
 					drawRectangle(g, Color.RED, x, y);
