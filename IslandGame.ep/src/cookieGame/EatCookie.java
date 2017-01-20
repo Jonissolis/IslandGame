@@ -10,6 +10,8 @@ import serverSide.Tile;
 public class EatCookie extends Interaction {
 
 	public static final int INTERACTION_ID = 7;
+	public static int xCoord;
+	public static int yCoord;
 	private IslandGrid islandGrid;
 	public EatCookie(IslandGrid islandGrid) {
 		this.islandGrid = islandGrid;
@@ -31,13 +33,11 @@ public class EatCookie extends Interaction {
 	}
 	
 	public void randomizeNewCookie() {
-		int x;
-		int y;
 		Random random = new Random();
 		while(true) {
-			x = random.nextInt(islandGrid.getWidth());
-			y = random.nextInt(islandGrid.getHeight());
-			if(addCookie(x, y)) {
+			xCoord = random.nextInt(islandGrid.getWidth());
+			yCoord = random.nextInt(islandGrid.getHeight());
+			if(addCookie(xCoord, yCoord)) {
 				return;
 			}
 		}
