@@ -6,9 +6,6 @@ import serverSide.Client;
 
 public class PathingAI extends BaseControls implements Runnable {
 
-	//Target Position
-	private int xTarget;
-	private int yTarget;
 	//"Bird" path values
 	private int xStart;
 	private int yStart;
@@ -48,14 +45,12 @@ public class PathingAI extends BaseControls implements Runnable {
 		yCurrFloat = yStart;
 	}
 
-	private boolean goInX() {
+	private boolean shouldGoInX() {
 		return (Math.signum(xDir) * (xCurrFloat - xCurr) >= Math.signum(yDir) * (yCurrFloat - yCurr));
 	}
 
-	private void lineWalk(int x, int y) {
+	private void lineWalk(int xTarget, int yTarget) {
 		//Target Position
-		xTarget = x;
-		yTarget = y;
 		//Calculate the "bird" path
 		xCurr = getXCoord();
 		yCurr = getYCoord();
@@ -67,70 +62,68 @@ public class PathingAI extends BaseControls implements Runnable {
 			xCurrFloat += xDir;
 			yCurrFloat += yDir;
 			//go towards the int point most distant from bord path.
-			if (goInX()) { //Should go i x
+			if (shouldGoInX()) { //Should go i x
 				if (isTileBlocked((int) (xCurr + Math.signum(xDir)), yCurr)) {
-					if (yDir > 0 && yTarget != yCurr) { //x was blocked try going in y instead
-						if (!tryMoveNorth()) {
-							break;
-						}
-						yCurr++;
-					} else if (yTarget != yCurr) {
-						if (!tryMoveSouth()) {
-							break;
-						}
-						yCurr--;
-					} else {
+					if (!goInY(yTarget)) {
 						break;
+					}
+					resetValues();
+				} else {
+					goInX(xTarget);
+				}
+			} else { // vill gå i y
+				if (isTileBlocked(xCurr, (int) (yCurr + Math.signum(yDir)))) {
+					if (!goInX(xTarget)) {
+						break;
+					}
+					resetValues();
+				} else {
+					goInY(yTarget);
+				}
+			}
+		}
+	}
+
+	private boolean canLineWalk(int xTarget, int yTarget) {
+		//Calculate the "bird" path
+		xCurr = getXCoord();
+		yCurr = getYCoord();
+		resetValues();
+		//while not at target position we should move.
+		while (xTarget != xCurr || yTarget != yCurr) {
+			//one step in bird path
+			xCurrFloat += xDir;
+			yCurrFloat += yDir;
+			//go towards the int point most distant from bord path.
+			if (shouldGoInX()) { //Should go i x
+				if (isTileBlocked((int) (xCurr + Math.signum(xDir)), yCurr)) {
+					if (yTarget != yCurr) { //x was blocked try going in y instead
+						if (isTileBlocked(xCurr, (int) (yCurr + Math.signum(yDir)))) {
+							return false;
+						}
+						yCurr += Math.signum(yDir);
 					}
 					//since we got blocked we make a new line
 					resetValues();
 				} else { //x är inte blockat...
-					if (xDir > 0) { // gå i x
-						if (!tryMoveEast()) {
-							break;
-						}
-						xCurr++;
-					} else {
-						if (!tryMoveWest()) {
-							break;
-						}
-						xCurr--;
-					}
+					xCurr += Math.signum(xDir);
 				}
 			} else { // vill gå i y
 				if (isTileBlocked(xCurr, (int) (yCurr + Math.signum(yDir)))) { //är y blockat?
-					if (xDir > 0 && xTarget != xCurr) { // gå i x istället
-						if (!tryMoveEast()) {
-							break;
+					if (xTarget != xCurr) { // gå i x istället
+						if (isTileBlocked((int) (xCurr + Math.signum(xDir)), yCurr)) {
+							return false;
 						}
 						xCurr++;
-
-					} else if (xTarget != xCurr) {
-						if (!tryMoveWest()) {
-							break;
-						}
-						xCurr--;
-					} else {
-						break;
 					}
 					//since we got blocked we make a new line
 					resetValues();
-				} else { //y är inte blockat...
-					if (yDir > 0) { // gå i y
-						if (!tryMoveNorth()) {
-							break;
-						}
-
-						yCurr++;
-					} else {
-						if (!tryMoveSouth()) {
-							break;
-						}
-						yCurr--;
-					}
+				} else {
+					yCurr += Math.signum(yDir);
 				}
 			}
 		}
+		return true;
 	}
 
 	public void randomWalk() {
@@ -148,80 +141,6 @@ public class PathingAI extends BaseControls implements Runnable {
 				moveSouth();
 				break;
 		}
-	}
-
-	private boolean canLineWalk(int x, int y) {
-		//Target Position
-		int xTarget = x;
-		int yTarget = y;
-		//Calculate the "bird" path
-		int xStart = getXCoord();
-		int yStart = getYCoord();
-		double xDiff = xTarget - xStart;
-		double yDiff = yTarget - yStart;
-		double totDiff = xDiff + yDiff;
-		double xAdd = xDiff / totDiff;
-		double yAdd = yDiff / totDiff;
-		//current position in double and int
-		double xCurrFloat = xStart;
-		double yCurrFloat = yStart;
-		int xCurr = xStart;
-		int yCurr = yStart;
-		//while not at target position we should move there.
-		while (xTarget != xCurr || yTarget != yCurr) {
-			//one step in bird path
-			xCurrFloat += xAdd;
-			yCurrFloat += yAdd;
-			//go towards the int point most distant from bord path.
-			if (Math.signum(xAdd) * (xCurrFloat - xCurr) >= Math.signum(yAdd) * (yCurrFloat - yCurr)) { //vill gå i x
-				if (isTileBlocked((int) (xCurr + Math.signum(xAdd)), yCurr)) { //är x blockat?
-					if (yAdd > 0 && yTarget != yCurr && !isTileBlocked(xCurr, yCurr + 1)) { // gå i y istället
-						yCurr++;
-					} else if (yAdd < 0 && yTarget != yCurr && !isTileBlocked(xCurr, yCurr - 1)) {
-						yCurr--;
-					} else {
-						return false;
-					}
-					//since we got blocked we make a new bird path
-					xStart = xCurr;
-					yStart = xCurr;
-					xDiff = xTarget - xStart;
-					yDiff = yTarget - yStart;
-					totDiff = xDiff + yDiff;
-					xAdd = xDiff / totDiff;
-					yAdd = yDiff / totDiff;
-					xCurrFloat = xCurr;
-					yCurrFloat = xCurr;
-				} else { //x är inte blockat...
-					if (xAdd > 0) { // gå i x
-						xCurr++;
-					} else {
-						xCurr--;
-					}
-				}
-			} else { // vill gå i y
-				if (isTileBlocked(xCurr, (int) (yCurr + Math.signum(yAdd)))) { //är y blockat?
-					if (xAdd > 0 && xTarget != xCurr && !isTileBlocked(xCurr + 1, yCurr)) { // gå i y istället
-						xCurr++;
-					} else if (xAdd < 0 && xTarget != xCurr && !isTileBlocked(xCurr - 1, yCurr)) {
-						xCurr--;
-					} else {
-						return false;
-					}
-
-				} else { //y är inte blockat...
-					if (yAdd > 0) { // gå i y
-						yCurr++;
-					} else {
-						yCurr--;
-					}
-				}
-			}
-			System.out.println(" ");
-			System.out.println("x: " + xCurr);
-			System.out.println("y: " + yCurr);
-		}
-		return true;
 	}
 
 	private void waitSome() {
@@ -273,4 +192,37 @@ public class PathingAI extends BaseControls implements Runnable {
 		return false;
 	}
 
+	private boolean goInY(int yTarget) {
+		if (yDir > 0 && yTarget != yCurr) { //x was blocked try going in y instead
+			if (!tryMoveNorth()) {
+				return false;
+			}
+			yCurr++;
+		} else if (yTarget != yCurr) {
+			if (!tryMoveSouth()) {
+				return false;
+			}
+			yCurr--;
+		} else {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean goInX(int xTarget) {
+		if (xDir > 0 && xTarget != xCurr) { //x was blocked try going in y instead
+			if (!tryMoveEast()) {
+				return false;
+			}
+			xCurr++;
+		} else if (xTarget != xCurr) {
+			if (!tryMoveWest()) {
+				return false;
+			}
+			xCurr--;
+		} else {
+			return false;
+		}
+		return true;
+	}
 }
