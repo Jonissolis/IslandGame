@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import cookieGame.EatCookie;
@@ -19,36 +18,27 @@ import interactions.Woodcutting;
  */
 public class ViewingGrid extends JPanel implements Observer {
 	private static final long serialVersionUID = 7830774810728311332L; // Eclipse varnade mig innan jag lagt till detta. 
-	
-	
-	private JFrame frame = new JFrame("Green, blue and red dots");
-	private IslandGrid islandGrid;
+	private final I_IslandGrid islandGrid;
 	private final int gridWidth; // The width of the grid, defined in the constructor. 
 	private final int gridHeight; // The height of the grid, defined in the constructor. 
 	
 	
-	public ViewingGrid(IslandGrid islandGrid) {
+	public ViewingGrid(I_IslandGrid islandGrid) {
 		this.islandGrid = islandGrid;
 		this.gridWidth = islandGrid.getWidth();
 		this.gridHeight = islandGrid.getHeight();
 		for(int i = 0; i < gridWidth; i++) {
 			for(int j = 0; j < gridHeight; j++) {
-				islandGrid.getTile(i, j).addObserver(this);
+				islandGrid.getTile(i, j).observe(this);
 			}
 		}
-		frame.setContentPane(this);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setSize(900, 750);
-		frame.setLocation(500, 50);
-		frame.setVisible(true);
 		setFocusable(true);
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Tile tile;
+		I_Tile tile;
 		for(int x = 0; x < gridWidth; x++) {
 			for(int y = 0; y < gridHeight; y++) {
 				tile = islandGrid.getTile(x, y);

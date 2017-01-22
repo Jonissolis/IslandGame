@@ -10,7 +10,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		IslandGrid islandGrid = new IslandGrid(20, 20);
-		new Controller(new ViewingGrid(islandGrid), new Player(new Client(islandGrid)));
+		GameView gameView = new GameView(islandGrid);
+		
+		new Controller(gameView.getViewingGrid(), new Player(new Client(islandGrid)));
 		new EatCookie(islandGrid).randomizeNewCookie();
 		for(int i = 0; i < 1; i++) {
 			new Thread(new WoodcuttingAI(new Client(islandGrid))).start();

@@ -1,7 +1,7 @@
 package serverSide;
 
 
-public class IslandGrid {
+public class IslandGrid implements I_IslandGrid {
 	private final int width;
 	private final int height;
 	private Tile[][] grid;

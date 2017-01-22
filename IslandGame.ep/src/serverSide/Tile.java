@@ -3,6 +3,7 @@ package serverSide;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -17,7 +18,7 @@ import interactions.Interaction;
  * Currently, each tile can either be empty, blocked or occupied. 
  *
  */
-public class Tile extends Observable {
+public class Tile extends Observable implements I_Tile {
 	private boolean blocked;
 	private Lock lock = new ReentrantLock();
 	private int xCoord;
@@ -175,5 +176,9 @@ public class Tile extends Observable {
 			System.out.println("ERROR: Wrong interaction was removed from a tile. "); // Error message. Could be caused by two characters doing the same interaction. 
 		}
 		
+	}
+	
+	public void observe(Observer obs) {
+		addObserver(obs);
 	}
 }
