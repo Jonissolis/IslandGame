@@ -6,177 +6,124 @@ import serverSide.Client;
 
 public class PathingAI extends BaseControls implements Runnable {
 
+	//Target Position
+	private int xTarget;
+	private int yTarget;
+	//"Bird" path values
+	private int xStart;
+	private int yStart;
+	private double xDiff;
+	private double yDiff;
+	private double totDiff;
+	private double xDir;
+	private double yDir;
+	//current position in double and int
+	private double xCurrFloat;
+	private double yCurrFloat;
+	private int xCurr;
+	private int yCurr;
+
 	public PathingAI(Client client) {
 		super(client);
 	}
 
 	@Override
 	public void run() {
-		//if (canLineWalk(19, 19)) {
-
-		//}
 		int xGoal = EatCookie.xCoord;
 		int yGoal = EatCookie.yCoord;
-
-		for (int j = 0; j < 10; j++) {
-			try {
-				Thread.sleep(30);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			lineWalk(xGoal, yGoal);
-			for (int i = 0; i < 10; i++) {
-				try {
-					Thread.sleep(30);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				randomWalk();
-			}
-		}
+		lineWalk(xGoal, yGoal);
 		System.out.println("Done");
 		//goTo(19, 19);
 	}
 
-	private void lineWalk(int x, int y) {
-		int stuckTime = 0;
-		//Target Position
-		int xTarget = x;
-		int yTarget = y;
-		//Calculate the "bird" path
-		int xStart = getXCoord();
-		int yStart = getYCoord();
-		double xDiff = xTarget - xStart;
-		double yDiff = yTarget - yStart;
-		double totDiff = Math.abs(xDiff) + Math.abs(yDiff);
-		double xAdd = xDiff / totDiff;
-		double yAdd = yDiff / totDiff;
-		//current position in double and int
-		double xCurrFloat = xStart;
-		double yCurrFloat = yStart;
-		int xCurr = xStart;
-		int yCurr = yStart;
-		int iteration = (xStart + yStart);
-		//while not at target position we should move there.
-		while (xTarget != xCurr || yTarget != yCurr && stuckTime < 3) {
+	private void resetValues() {
+		xStart = xCurr;
+		yStart = yCurr;
+		xDiff = xTarget - xStart;
+		yDiff = yTarget - yStart;
+		totDiff = Math.abs(xDiff) + Math.abs(yDiff);
+		xDir = xDiff / totDiff;
+		yDir = yDiff / totDiff;
+		xCurrFloat = xStart;
+		yCurrFloat = yStart;
+	}
 
-			try {// a small pause
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	private boolean goInX() {
+		return (Math.signum(xDir) * (xCurrFloat - xCurr) >= Math.signum(yDir) * (yCurrFloat - yCurr));
+	}
+
+	private void lineWalk(int x, int y) {
+		//Target Position
+		xTarget = x;
+		yTarget = y;
+		//Calculate the "bird" path
+		xCurr = getXCoord();
+		yCurr = getYCoord();
+		resetValues();
+		//while not at target position we should move.
+		while (xTarget != xCurr || yTarget != yCurr) {
+			waitSome();
 			//one step in bird path
-			xCurrFloat += xAdd;
-			yCurrFloat += yAdd;
+			xCurrFloat += xDir;
+			yCurrFloat += yDir;
 			//go towards the int point most distant from bord path.
-			if (Math.signum(xAdd) * (xCurrFloat - xCurr) >= Math.signum(yAdd) * (yCurrFloat - yCurr)) { //vill gå i x
-				if (isTileBlocked((int) (xCurr + Math.signum(xAdd)), yCurr)) { //är x blockat?
-					if (yAdd > 0 && yTarget != yCurr) { // gå i y istället
-						while (!moveNorth() && stuckTime < 3) {
-							System.out.println("FAST");
-							stuckTime++;
-						}
-						if (stuckTime > 2) {
+			if (goInX()) { //Should go i x
+				if (isTileBlocked((int) (xCurr + Math.signum(xDir)), yCurr)) {
+					if (yDir > 0 && yTarget != yCurr) { //x was blocked try going in y instead
+						if (!tryMoveNorth()) {
 							break;
 						}
 						yCurr++;
-
 					} else if (yTarget != yCurr) {
-						while (!moveSouth() && stuckTime < 3) {
-							stuckTime++;
-						}
-						if (stuckTime > 2) {
+						if (!tryMoveSouth()) {
 							break;
 						}
 						yCurr--;
 					} else {
-						System.out.println("kan ej slutföra");
 						break;
 					}
-					//since we got blocked we make a new bird path
-					xStart = xCurr;
-					yStart = yCurr;
-					xDiff = xTarget - xStart;
-					yDiff = yTarget - yStart;
-					totDiff = Math.abs(xDiff) + Math.abs(yDiff);
-					xAdd = xDiff / totDiff;
-					yAdd = yDiff / totDiff;
-					xCurrFloat = xCurr;
-					yCurrFloat = yCurr;
+					//since we got blocked we make a new line
+					resetValues();
 				} else { //x är inte blockat...
-					if (xAdd > 0) { // gå i x
-						while (!moveEast() && stuckTime < 3) {
-							System.out.println("FAST");
-							stuckTime++;
-						}
-						if (stuckTime > 2) {
+					if (xDir > 0) { // gå i x
+						if (!tryMoveEast()) {
 							break;
 						}
 						xCurr++;
 					} else {
-						while (!moveWest() && stuckTime < 3) {
-							System.out.println("FAST");
-							stuckTime++;
-						}
-						if (stuckTime > 2) {
+						if (!tryMoveWest()) {
 							break;
 						}
 						xCurr--;
 					}
 				}
 			} else { // vill gå i y
-				if (isTileBlocked(xCurr, (int) (yCurr + Math.signum(yAdd)))) { //är y blockat?
-					if (xAdd > 0 && xTarget != xCurr) { // gå i x istället
-						while (!moveEast() && stuckTime < 3) {
-							System.out.println("FAST");
-							stuckTime++;
-						}
-						if (stuckTime > 2) {
+				if (isTileBlocked(xCurr, (int) (yCurr + Math.signum(yDir)))) { //är y blockat?
+					if (xDir > 0 && xTarget != xCurr) { // gå i x istället
+						if (!tryMoveEast()) {
 							break;
 						}
 						xCurr++;
 
 					} else if (xTarget != xCurr) {
-						while (!moveWest() && stuckTime < 3) {
-							System.out.println("FAST");
-							stuckTime++;
-						}
-						if (stuckTime > 2) {
+						if (!tryMoveWest()) {
 							break;
 						}
 						xCurr--;
 					} else {
-						System.out.println("kan ej slutföra");
 						break;
 					}
-					//since we got blocked we make a new bird path
-					xStart = xCurr;
-					yStart = yCurr;
-					xDiff = xTarget - xStart;
-					yDiff = yTarget - yStart;
-					totDiff = Math.abs(xDiff) + Math.abs(yDiff);
-					xAdd = xDiff / totDiff;
-					yAdd = yDiff / totDiff;
-					xCurrFloat = xCurr;
-					yCurrFloat = yCurr;
+					//since we got blocked we make a new line
+					resetValues();
 				} else { //y är inte blockat...
-					if (yAdd > 0) { // gå i y
-						while (!moveNorth() && stuckTime < 3) {
-							System.out.println("FAST");
-							stuckTime++;
-						}
-						if (stuckTime > 2) {
+					if (yDir > 0) { // gå i y
+						if (!tryMoveNorth()) {
 							break;
 						}
+
 						yCurr++;
 					} else {
-						while (!moveSouth() && stuckTime < 3) {
-							stuckTime++;
-						}
-						if (stuckTime > 2) {
+						if (!tryMoveSouth()) {
 							break;
 						}
 						yCurr--;
@@ -202,7 +149,7 @@ public class PathingAI extends BaseControls implements Runnable {
 				break;
 		}
 	}
-	
+
 	private boolean canLineWalk(int x, int y) {
 		//Target Position
 		int xTarget = x;
@@ -276,7 +223,54 @@ public class PathingAI extends BaseControls implements Runnable {
 		}
 		return true;
 	}
-	//private void lineWalk(int x, int y) {
-	//}
+
+	private void waitSome() {
+		try {// a small pause
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private boolean tryMoveNorth() {
+		for (int stuckTime = 0; stuckTime < 3; stuckTime++) {
+			waitSome();
+			if (moveNorth()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean tryMoveEast() {
+		for (int stuckTime = 0; stuckTime < 3; stuckTime++) {
+			waitSome();
+			if (moveEast()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean tryMoveSouth() {
+		for (int stuckTime = 0; stuckTime < 3; stuckTime++) {
+			waitSome();
+			if (moveSouth()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean tryMoveWest() {
+		for (int stuckTime = 0; stuckTime < 3; stuckTime++) {
+			waitSome();
+			if (moveWest()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }
